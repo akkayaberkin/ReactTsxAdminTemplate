@@ -10,6 +10,7 @@ import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import UploadFileIcon from 'mdi-material-ui/Upload';
+import ViewListIcon from 'mdi-material-ui/ViewList';
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
@@ -29,6 +30,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Ürün Yükleme',
       icon: UploadFileIcon,
       path: '/product-upload'
+    },
+    {
+      title: 'Ürün Listesi',
+      icon: ViewListIcon,
+      path: '/product-list'
     },
     {
       sectionTitle: 'Pages'
