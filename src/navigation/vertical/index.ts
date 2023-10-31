@@ -11,6 +11,8 @@ import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import UploadFileIcon from 'mdi-material-ui/Upload';
 import ViewListIcon from 'mdi-material-ui/ViewList';
+import DoubleArrowIcon from 'mdi-material-ui/CircleDouble';
+
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
@@ -35,6 +37,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Ürün Listesi',
       icon: ViewListIcon,
       path: '/product-list'
+    },
+    {
+      title: 'Sipariş Listesi',
+      icon: DoubleArrowIcon,
+      path: '/order-list'
     },
     {
       sectionTitle: 'Pages'
