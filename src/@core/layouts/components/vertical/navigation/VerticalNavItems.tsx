@@ -28,6 +28,11 @@ const VerticalNavItems = (props: Props) => {
   const { verticalNavItems } = props
 
   const RenderMenuItems = verticalNavItems?.map((item: NavLink | NavSectionTitle, index: number) => {
+    // Eğer öğe 'hidden' ise render etme
+    if (item.hidden) {
+      return null
+    }
+
     const TagName: any = resolveNavItemComponent(item)
 
     return <TagName {...props} key={index} item={item} />

@@ -1,22 +1,51 @@
 import React, { useEffect } from 'react'
 import CustomTable from 'src/layouts/components/CustomTable'
-
+import {getData} from 'src/api'
+import moment from 'moment';
+import apiClient from '../../api/apiClient';
 function OrderList() {
   
   const [data, setData] = React.useState<any[]>([]);
-  const data1 = [
-    { id: 1, name: 'Product 1', price: 10.99, orderDate: '10-10-2021', orderStatus: 'Pending' },
-    { id: 2, name: 'Product 2', price: 19.99 , orderDate: '12-10-2021', orderStatus: 'Closed'},
-    { id: 3, name: 'Product 3', price: 5.99, orderDate: '15-10-2021', orderStatus: 'Approved' },
-  ]
   useEffect(() => {
-    setData(data1)
+    const getUserData = async () => {
+      try {
+         await getData('/Order/GetOpenOrders').then((res:any) => res.data).then((res:any) => {
+          let parseData = res.map((item:any) => {
+            return {
+              "Sip.No": item.orderNo,
+              "customerGuid": item.customerGuid,
+              "Durum": item.status,
+              id: item.id,
+              "Adres": item.deliveryAddress,
+              "Ödeme Tipi": item.paymentMethod,
+              "Tahmini Teslim Tarihi": item.expectedDeliveryDate,
+              "Kargo No": item.trackingNumber,
+              "Oluşturulma Tarihi": moment(item.createdDate).format('DD.MM.YYYY'),
+            }
+          })
+          setData(parseData);
+          });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    getUserData();
   }, []);
   
 
   return (
       data&&data.length>0&&
-      <CustomTable data={data}/>
+      <CustomTable data={data}
+      linkColumns={[
+        {
+          basePath: '/order-detail',
+          columnName: 'Sip.No',
+          linkColumn: 'customerGuid', 
+        }
+      ]}
+      excludeColumns={["customerGuid"]}
+      />
   )
 }
 
