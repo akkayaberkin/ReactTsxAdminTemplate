@@ -47,7 +47,7 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Sipariş Detay',
       icon: DoubleArrowIcon,
       hidden: true,
-      path: '/order-detail',
+      path: '/order-detail'
     },
     {
       sectionTitle: 'Pages'

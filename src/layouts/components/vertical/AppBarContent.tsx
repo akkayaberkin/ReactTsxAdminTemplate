@@ -56,7 +56,7 @@ const AppBarContent = (props: Props) => {
           }}
         />
       </Box>
-      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* silinecek <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {hiddenSm ? null : (
           <Box
             component='a'
@@ -75,7 +75,7 @@ const AppBarContent = (props: Props) => {
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <NotificationDropdown />
         <UserDropdown />
-      </Box>
+      </Box> */}
     </Box>
   )
 }
