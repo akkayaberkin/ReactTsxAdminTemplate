@@ -50,6 +50,12 @@ const navigation = (): VerticalNavItemsType => {
       path: '/order-detail'
     },
     {
+      title: 'Giriş Ekranı',
+      icon: DoubleArrowIcon,
+      hidden: true,
+      path: '/login'
+    },
+    {
       sectionTitle: 'Pages'
     },
     {

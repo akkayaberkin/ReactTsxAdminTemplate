@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField, Grid, FormControl, InputLabel, Select, MenuItem, IconButton, Breadcrumbs, Typography, Link } from '@mui/material';
 import { Alert, AlertTitle } from '@mui/lab';
+import {postData} from 'src/api'
 
 interface Product {
   name: string;
@@ -41,32 +42,22 @@ const initialProduct: Product = {
 };
 
 const ProductUpload = () => {
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const url = `${apiUrl}/api/Category/`;
-  console.log(apiUrl);
   const [product, setProduct] = useState<Product>(initialProduct);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [photoCount, setPhotoCount] = useState<number>(1);
   const [data, setData] = useState<any>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch( url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+
+  const postDataToApi = async () => {
+  console.log(product)
+    debugger
+    try {
+      await postData('/Product/Save',product).then((res:any) => res.data).then((res:any) => {
+        setData(res);
         });
-        const data = await response.json();
-        debugger;
-        setData(data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }
 
   const handleProductChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<{ value: unknown }>, name: string) => {
     const value = event.target.value as string;
@@ -119,7 +110,13 @@ const ProductUpload = () => {
   const handleAddPhoto = () => {
     setPhotoCount((prevCount) => prevCount + 1);
   };
+  const handlePhotoChange = (e:any, index:any, field:any) => {
+    const newProductPhotoList = [...product.productPhotoList];
+    const updatedPhoto = { ...newProductPhotoList[index], [field]: e.target.value };
+    newProductPhotoList[index] = updatedPhoto;
   
+    setProduct({ ...product, productPhotoList: newProductPhotoList });
+  };
   return (
     <>
    <Breadcrumbs aria-label="breadcrumb">
@@ -174,26 +171,44 @@ const ProductUpload = () => {
           </FormControl>
         </Grid>
         {Array.from({ length: photoCount }).map((_, index) => (
-      <React.Fragment key={index}>
-        <Grid item xs={12} sm={6} style={{marginTop:"2rem"}}>
-          <TextField fullWidth label={`Photo ${index + 1} Name`} name={`photoName${index}`} value={product.productPhotoList[index]?.name} onChange={(e) => handleProductChange(e, `productPhotoList.${index}.name`)} />
-        </Grid>
-        <Grid item xs={12} sm={6} style={{marginTop:"2rem"}}>
-          <TextField fullWidth label={`Photo ${index + 1} Description`} name={`photoDescription${index}`} value={product.productPhotoList[index]?.description} onChange={(e) => handleProductChange(e, `productPhotoList.${index}.description`)} />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField fullWidth label={`Photo ${index + 1} URL`} name={`photoUrl${index}`} value={product.productPhotoList[index]?.photoUrl} onChange={(e) => handleProductChange(e, `productPhotoList.${index}.photoUrl`)} />
-        </Grid>
-        <br/>
-      </React.Fragment>
-    ))}
+  <React.Fragment key={index}>
+    <Grid item xs={12} sm={6} style={{marginTop:"2rem"}}>
+      <TextField 
+        fullWidth 
+        label={`Photo ${index + 1} Name`} 
+        name={`photoName${index}`} 
+        value={product.productPhotoList[index]?.name || ''} 
+        onChange={(e) => handlePhotoChange(e, index, 'name')} 
+      />
+    </Grid>
+    <Grid item xs={12} sm={6} style={{marginTop:"2rem"}}>
+      <TextField 
+        fullWidth 
+        label={`Photo ${index + 1} Description`} 
+        name={`photoDescription${index}`} 
+        value={product.productPhotoList[index]?.description || ''} 
+        onChange={(e) => handlePhotoChange(e, index, 'description')} 
+      />
+    </Grid>
+    <Grid item xs={12}>
+      <TextField 
+        fullWidth 
+        label={`Photo ${index + 1} URL`} 
+        name={`photoUrl${index}`} 
+        value={product.productPhotoList[index]?.photoUrl || ''} 
+        onChange={(e) => handlePhotoChange(e, index, 'photoUrl')} 
+      />
+    </Grid>
+    <br/>
+  </React.Fragment>
+))}
     <Grid item xs={12}>
       <Button variant='contained' color='primary' onClick={handleAddPhoto}>
         Add Photo
       </Button>
     </Grid>
         <Grid item xs={12}>
-          <Button type='submit' variant='contained' color='primary'>
+          <Button type='submit' variant='contained' color='primary' onClick={postDataToApi}>
             Upload
           </Button>
         </Grid>
